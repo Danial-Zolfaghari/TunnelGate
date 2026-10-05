@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <NuGetAudit>false</NuGetAudit>
+    <AssemblyName>TunnelGate</AssemblyName>
+    <RootNamespace>TunnelGate</RootNamespace>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <SelfContained>true</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    <PublishTrimmed>false</PublishTrimmed>
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+    <Version>3.1.14</Version>
+    <ApplicationIcon>Assets\TunnelGate.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="tools\plink.exe" LogicalName="TunnelGate.tools.plink.exe" Condition="Exists('tools\plink.exe')" />
+      <Resource Include="Assets\TunnelGate.ico" />
+    <Resource Include="Assets\TunnelGateIcon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- The installer is a separate WPF project. Never compile its sources into TunnelGate.exe. -->
+    <Compile Remove="Installer\**\*.cs" />
+    <Page Remove="Installer\**\*.xaml" />
+    <ApplicationDefinition Remove="Installer\App.xaml" />
+    <EmbeddedResource Remove="Installer\**\*" />
+    <None Remove="Installer\**\*" />
+  </ItemGroup>
+
+</Project>
