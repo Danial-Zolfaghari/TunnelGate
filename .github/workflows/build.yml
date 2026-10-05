@@ -1,0 +1,50 @@
+name: Windows Build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify repository
+        shell: pwsh
+        run: python ./scripts/verify_repo.py
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Build application and installer
+        shell: pwsh
+        run: ./build-installer.ps1
+
+      - name: Verify outputs
+        shell: pwsh
+        run: |
+          if (-not (Test-Path './output/TunnelGate.exe')) { throw 'TunnelGate.exe is missing.' }
+          if (-not (Test-Path './installer-output/TunnelGate-Setup.exe')) { throw 'TunnelGate-Setup.exe is missing.' }
+
+      - name: Upload application artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: TunnelGate
+          path: output/TunnelGate.exe
+
+      - name: Upload installer artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: TunnelGate-Setup
+          path: installer-output/TunnelGate-Setup.exe
