@@ -10,8 +10,8 @@ internal static class InstallerEngine
     private const string ProductName = "TunnelGate";
     private const string ProductVersion = "3.1.12";
     private const string PayloadResource = "TunnelGate.Setup.Payload.TunnelGate.exe";
-    private const string RunKey = @"SoftwareMicrosoftWindowsCurrentVersionRun";
-    private const string UninstallKey = @"SoftwareMicrosoftWindowsCurrentVersionUninstallTunnelGate";
+    private const string RunKey = @"Software\Microsoft\Windows\CurrentVersion\Run";
+    private const string UninstallKey = @"Software\Microsoft\Windows\CurrentVersion\Uninstall\TunnelGate";
 
     internal static string DefaultInstallDirectory => Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
@@ -58,14 +58,14 @@ internal static class InstallerEngine
             return candidate;
 
         // v3.1.11 could persist a malformed value such as:
-        // C:...installer-output"C:Users...ProgramsTunnelGate"
+        // C:\...\installer-output\"C:\Users\...\Programs\TunnelGate"
         // Recover by using the last absolute Windows drive path in the string.
         var lastDriveRoot = -1;
         for (var i = 0; i <= candidate.Length - 3; i++)
         {
             if (char.IsLetter(candidate[i]) &&
                 candidate[i + 1] == ':' &&
-                (candidate[i + 2] == '\' || candidate[i + 2] == '/'))
+                (candidate[i + 2] == '\\' || candidate[i + 2] == '/'))
             {
                 lastDriveRoot = i;
             }
@@ -166,7 +166,7 @@ internal static class InstallerEngine
         }
         catch { }
 
-        // Preserve %LOCALAPPDATA%TunnelGate: encrypted vault, profiles and logs are user data.
+        // Preserve %LOCALAPPDATA%\TunnelGate: encrypted vault, profiles and logs are user data.
         ScheduleDirectoryRemoval(installDirectory);
     }
 
@@ -210,7 +210,7 @@ internal static class InstallerEngine
     private static void WriteStartupRegistry(string installedExe)
     {
         using var key = Registry.CurrentUser.CreateSubKey(RunKey, true);
-        key.SetValue(ProductName, $""{installedExe}"");
+        key.SetValue(ProductName, $"\"{installedExe}\"");
     }
 
     private static void RemoveStartupRegistry()
@@ -227,7 +227,7 @@ internal static class InstallerEngine
         key.SetValue("DisplayIcon", installedExe);
         key.SetValue("Publisher", "TunnelGate");
         key.SetValue("InstallLocation", installDirectory);
-        key.SetValue("UninstallString", $""{installedUninstaller}" --uninstall");
+        key.SetValue("UninstallString", $"\"{installedUninstaller}\" --uninstall");
         key.SetValue("NoModify", 1, RegistryValueKind.DWord);
         key.SetValue("NoRepair", 1, RegistryValueKind.DWord);
     }
@@ -290,7 +290,7 @@ internal static class InstallerEngine
         var exe = Path.Combine(installDirectory, "TunnelGate.exe");
         var uninstaller = Path.Combine(installDirectory, "TunnelGate.Uninstall.exe");
         var marker = Path.Combine(installDirectory, ".tunnelgate-install");
-        var command = $"/c timeout /t 2 /nobreak >nul & del /f /q "{exe}" 2>nul & del /f /q "{uninstaller}" 2>nul & del /f /q "{marker}" 2>nul & rmdir "{installDirectory}" 2>nul";
+        var command = $"/c timeout /t 2 /nobreak >nul & del /f /q \"{exe}\" 2>nul & del /f /q \"{uninstaller}\" 2>nul & del /f /q \"{marker}\" 2>nul & rmdir \"{installDirectory}\" 2>nul";
         Process.Start(new ProcessStartInfo("cmd.exe", command)
         {
             UseShellExecute = false,
@@ -304,7 +304,7 @@ internal static class InstallerEngine
         if (string.IsNullOrWhiteSpace(left) || string.IsNullOrWhiteSpace(right)) return false;
         try
         {
-            return string.Equals(Path.GetFullPath(left).TrimEnd('\', '/'), Path.GetFullPath(right).TrimEnd('\', '/'), StringComparison.OrdinalIgnoreCase);
+            return string.Equals(Path.GetFullPath(left).TrimEnd('\\', '/'), Path.GetFullPath(right).TrimEnd('\\', '/'), StringComparison.OrdinalIgnoreCase);
         }
         catch { return false; }
     }

@@ -1,0 +1,385 @@
+<Window x:Class="TunnelGate.UI.VaultWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
+        Title="TunnelGate Vault"
+        Width="680"
+        Height="700"
+        MinWidth="680"
+        MinHeight="700"
+        MaxWidth="680"
+        MaxHeight="700"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        Background="#070B12"
+        Foreground="#F4F7FB"
+        FontFamily="Segoe UI"
+        UseLayoutRounding="True"
+        SnapsToDevicePixels="True"
+        PreviewKeyDown="Window_PreviewKeyDown">
+
+    <shell:WindowChrome.WindowChrome>
+        <shell:WindowChrome CaptionHeight="50"
+                            ResizeBorderThickness="0"
+                            CornerRadius="14"
+                            GlassFrameThickness="0"
+                            UseAeroCaptionButtons="False"/>
+    </shell:WindowChrome.WindowChrome>
+
+    <Window.Resources>
+        <SolidColorBrush x:Key="VaultSurface" Color="#0C121D"/>
+        <SolidColorBrush x:Key="VaultSurface2" Color="#101927"/>
+        <SolidColorBrush x:Key="VaultInput" Color="#09111C"/>
+        <SolidColorBrush x:Key="VaultBorder" Color="#233147"/>
+        <SolidColorBrush x:Key="VaultBorderHover" Color="#344863"/>
+        <SolidColorBrush x:Key="VaultAccent" Color="#58E69A"/>
+        <SolidColorBrush x:Key="VaultAccentDark" Color="#163B2B"/>
+        <SolidColorBrush x:Key="VaultText" Color="#F4F7FB"/>
+        <SolidColorBrush x:Key="VaultMuted" Color="#8E9DB2"/>
+
+        <Style x:Key="TitleBarButton" TargetType="Button">
+            <Setter Property="Width" Value="38"/>
+            <Setter Property="Height" Value="34"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#AAB6C7"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="shell:WindowChrome.IsHitTestVisibleInChrome" Value="True"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Chrome" Background="{TemplateBinding Background}" CornerRadius="8">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Chrome" Property="Background" Value="#2B1720"/>
+                                <Setter Property="Foreground" Value="#FF7886"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Chrome" Property="Background" Value="#431B27"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="VaultTextInput" TargetType="TextBox">
+            <Setter Property="Height" Value="48"/>
+            <Setter Property="Background" Value="{StaticResource VaultInput}"/>
+            <Setter Property="Foreground" Value="{StaticResource VaultText}"/>
+            <Setter Property="CaretBrush" Value="{StaticResource VaultAccent}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource VaultBorder}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="14,0"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border x:Name="InputBorder"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="10">
+                            <ScrollViewer x:Name="PART_ContentHost"
+                                          Margin="{TemplateBinding Padding}"
+                                          VerticalAlignment="Center"
+                                          HorizontalAlignment="Stretch"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="InputBorder" Property="BorderBrush" Value="{StaticResource VaultBorderHover}"/>
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                                <Setter TargetName="InputBorder" Property="BorderBrush" Value="{StaticResource VaultAccent}"/>
+                            </Trigger>
+                            <Trigger Property="IsReadOnly" Value="True">
+                                <Setter TargetName="InputBorder" Property="Opacity" Value="0.95"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="InputBorder" Property="Opacity" Value="0.55"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="VaultRevealTextInput" TargetType="TextBox" BasedOn="{StaticResource VaultTextInput}">
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="Foreground" Value="#FFFFFF"/>
+        </Style>
+
+        <Style x:Key="VaultPasswordBox" TargetType="PasswordBox">
+            <Setter Property="Height" Value="48"/>
+            <Setter Property="Background" Value="{StaticResource VaultInput}"/>
+            <Setter Property="Foreground" Value="{StaticResource VaultText}"/>
+            <Setter Property="CaretBrush" Value="{StaticResource VaultAccent}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource VaultBorder}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="14,0"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="PasswordChar" Value="●"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="PasswordBox">
+                        <Border x:Name="InputBorder"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="10">
+                            <ScrollViewer x:Name="PART_ContentHost"
+                                          Margin="{TemplateBinding Padding}"
+                                          VerticalAlignment="Center"
+                                          HorizontalAlignment="Stretch"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="InputBorder" Property="BorderBrush" Value="{StaticResource VaultBorderHover}"/>
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                                <Setter TargetName="InputBorder" Property="BorderBrush" Value="{StaticResource VaultAccent}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="InputBorder" Property="Opacity" Value="0.55"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="PrimaryButton" TargetType="Button">
+            <Setter Property="Height" Value="46"/>
+            <Setter Property="MinWidth" Value="190"/>
+            <Setter Property="Padding" Value="20,0"/>
+            <Setter Property="Background" Value="{StaticResource VaultAccent}"/>
+            <Setter Property="Foreground" Value="#06120D"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Chrome" Background="{TemplateBinding Background}" CornerRadius="10">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Chrome" Property="Background" Value="#72F0AE"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Chrome" Property="Background" Value="#48CC86"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Chrome" Property="Opacity" Value="0.42"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="SecondaryButton" TargetType="Button">
+            <Setter Property="Height" Value="46"/>
+            <Setter Property="MinWidth" Value="112"/>
+            <Setter Property="Padding" Value="18,0"/>
+            <Setter Property="Background" Value="#111A28"/>
+            <Setter Property="Foreground" Value="#DCE5F1"/>
+            <Setter Property="BorderBrush" Value="#2B3B53"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Chrome" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="10">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Chrome" Property="Background" Value="#172336"/>
+                                <Setter TargetName="Chrome" Property="BorderBrush" Value="#425A79"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Chrome" Property="Background" Value="#0E1622"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Chrome" Property="Opacity" Value="0.48"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="RevealButton" TargetType="Button" BasedOn="{StaticResource SecondaryButton}">
+            <Setter Property="MinWidth" Value="90"/>
+            <Setter Property="Height" Value="48"/>
+            <Setter Property="FontSize" Value="12.5"/>
+        </Style>
+
+        <Style x:Key="SecurityChip" TargetType="Border">
+            <Setter Property="Margin" Value="0,0,8,8"/>
+            <Setter Property="Padding" Value="11,7"/>
+            <Setter Property="CornerRadius" Value="999"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Background" Value="#0D1623"/>
+            <Setter Property="BorderBrush" Value="#203146"/>
+        </Style>
+    </Window.Resources>
+
+    <Border Margin="10" Background="#050A12" BorderBrush="#172131" BorderThickness="1" CornerRadius="18">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0" Height="54" Background="#09111C" Margin="1,1,1,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="18,0,0,0">
+                    <Border Width="28" Height="28" Background="#143528" CornerRadius="8">
+                        <TextBlock Text="TG" Foreground="{StaticResource VaultAccent}" FontSize="11" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <StackPanel Margin="10,0,0,0" VerticalAlignment="Center">
+                        <TextBlock Text="TunnelGate" FontSize="13" FontWeight="SemiBold" Foreground="#EAF0F7"/>
+                        <TextBlock Text="Secure Vault" FontSize="10.5" Foreground="#74849A" Margin="0,1,0,0"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <Border Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,12,0" Padding="8,4" Background="#0D1D18" BorderBrush="#214A39" BorderThickness="1" CornerRadius="7">
+                    <StackPanel Orientation="Horizontal">
+                        <Ellipse Width="6" Height="6" Fill="{StaticResource VaultAccent}" VerticalAlignment="Center"/>
+                        <TextBlock Text="LOCAL • ENCRYPTED" Margin="6,0,0,0" FontSize="9.5" FontWeight="SemiBold" Foreground="#82DDB0"/>
+                    </StackPanel>
+                </Border>
+
+                <Button Grid.Column="2" ToolTip="Close" Click="Exit_Click" Style="{StaticResource TitleBarButton}">
+                    <TextBlock Text="×" FontSize="22" FontWeight="Light" Margin="0,-2,0,0"/>
+                </Button>
+            </Grid>
+
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="28,12,28,28">
+                <Border Background="{StaticResource VaultSurface}" BorderBrush="#1E2D42" BorderThickness="1" CornerRadius="16" Padding="30">
+                    <StackPanel>
+                        <Grid Margin="0,0,0,22">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Width="54" Height="54" Background="{StaticResource VaultAccentDark}" CornerRadius="14" VerticalAlignment="Top">
+                                <Grid>
+                                    <Ellipse Width="26" Height="26" Stroke="{StaticResource VaultAccent}" StrokeThickness="1.4"/>
+                                    <Rectangle Width="13" Height="12" RadiusX="2" RadiusY="2" Stroke="{StaticResource VaultAccent}" StrokeThickness="1.4" VerticalAlignment="Center" Margin="0,8,0,0"/>
+                                    <Ellipse Width="2.8" Height="2.8" Fill="{StaticResource VaultAccent}" VerticalAlignment="Center" Margin="0,11,0,0"/>
+                                </Grid>
+                            </Border>
+                            <StackPanel Grid.Column="1" Margin="16,0,0,0">
+                                <TextBlock Text="TUNNELGATE SECURITY" FontSize="10.5" FontWeight="Bold" Foreground="{StaticResource VaultAccent}"/>
+                                <TextBlock x:Name="TitleText" Text="Unlock encrypted vault" FontSize="22" FontWeight="SemiBold" Foreground="{StaticResource VaultText}" Margin="0,5,0,0"/>
+                                <TextBlock x:Name="SubtitleText" Text="Enter your master password to continue." FontSize="12.5" Foreground="{StaticResource VaultMuted}" TextWrapping="Wrap" Margin="0,5,0,0"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <WrapPanel Margin="0,0,0,23">
+                            <Border Style="{StaticResource SecurityChip}"><TextBlock Text="AES-256-GCM" FontSize="10.5" Foreground="#9DB0C8"/></Border>
+                            <Border Style="{StaticResource SecurityChip}"><TextBlock Text="LOCAL ONLY" FontSize="10.5" Foreground="#9DB0C8"/></Border>
+                            <Border Style="{StaticResource SecurityChip}"><TextBlock Text="DPAPI SESSION" FontSize="10.5" Foreground="#9DB0C8"/></Border>
+                        </WrapPanel>
+
+                        <Grid Margin="0,0,0,8">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                            <TextBlock Text="Master password" FontSize="12.5" FontWeight="SemiBold" Foreground="#C8D2E0"/>
+                            <TextBlock Grid.Column="1" x:Name="PasswordHintText" Text="6+ characters" FontSize="10.5" Foreground="#718197"/>
+                        </Grid>
+                        <Grid>
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="94"/></Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0">
+                                <PasswordBox x:Name="PasswordBox" Style="{StaticResource VaultPasswordBox}" PasswordChanged="PasswordBox_PasswordChanged" KeyDown="PasswordBox_KeyDown"/>
+                                <TextBox x:Name="PasswordRevealBox" Style="{StaticResource VaultRevealTextInput}" Visibility="Collapsed" TextChanged="PasswordRevealBox_TextChanged" KeyDown="PasswordRevealBox_KeyDown"/>
+                            </Grid>
+                            <Button Grid.Column="1" Margin="10,0,0,0" x:Name="PasswordRevealButton" Content="Show" Click="PasswordRevealButton_Click" Style="{StaticResource RevealButton}"/>
+                        </Grid>
+
+                        <StackPanel Margin="2,7,0,0">
+                            <TextBlock x:Name="CapsWarningText" Text="Caps Lock is on" FontSize="11" Foreground="#F4C36B" Visibility="Collapsed"/>
+                            <TextBlock Text="Use Show if you want to preview exactly what you typed." FontSize="10.5" Foreground="#738299" Margin="0,2,0,0"/>
+                        </StackPanel>
+
+                        <StackPanel x:Name="StrengthPanel" Margin="0,12,0,0" Visibility="Collapsed">
+                            <Grid>
+                                <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                <Border x:Name="Strength1" Grid.Column="0" Height="3" Background="#243044" CornerRadius="2" Margin="0,0,4,0"/>
+                                <Border x:Name="Strength2" Grid.Column="1" Height="3" Background="#243044" CornerRadius="2" Margin="0,0,4,0"/>
+                                <Border x:Name="Strength3" Grid.Column="2" Height="3" Background="#243044" CornerRadius="2" Margin="0,0,4,0"/>
+                                <Border x:Name="Strength4" Grid.Column="3" Height="3" Background="#243044" CornerRadius="2"/>
+                            </Grid>
+                            <Grid Margin="0,7,0,0">
+                                <TextBlock x:Name="StrengthText" Text="Password strength" FontSize="10.5" Foreground="#78889F"/>
+                                <TextBlock x:Name="LengthRequirementText" Text="○ 6+ characters" HorizontalAlignment="Right" FontSize="10.5" Foreground="#78889F"/>
+                            </Grid>
+                        </StackPanel>
+
+                        <StackPanel x:Name="ConfirmPanel" Margin="0,18,0,0">
+                            <Grid Margin="0,0,0,8">
+                                <TextBlock Text="Confirm password" FontSize="12.5" FontWeight="SemiBold" Foreground="#C8D2E0"/>
+                                <TextBlock x:Name="MatchRequirementText" Text="Waiting for confirmation" HorizontalAlignment="Right" FontSize="10.5" Foreground="#718197"/>
+                            </Grid>
+                            <Grid>
+                                <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="94"/></Grid.ColumnDefinitions>
+                                <Grid Grid.Column="0">
+                                    <PasswordBox x:Name="ConfirmBox" Style="{StaticResource VaultPasswordBox}" PasswordChanged="ConfirmBox_PasswordChanged" KeyDown="PasswordBox_KeyDown"/>
+                                    <TextBox x:Name="ConfirmRevealBox" Style="{StaticResource VaultRevealTextInput}" Visibility="Collapsed" TextChanged="ConfirmRevealBox_TextChanged" KeyDown="PasswordRevealBox_KeyDown"/>
+                                </Grid>
+                                <Button Grid.Column="1" Margin="10,0,0,0" x:Name="ConfirmRevealButton" Content="Show" Click="ConfirmRevealButton_Click" Style="{StaticResource RevealButton}"/>
+                            </Grid>
+                        </StackPanel>
+
+                        <Border Margin="0,20,0,0" Padding="12,10" Background="#0A151E" BorderBrush="#1D3342" BorderThickness="1" CornerRadius="9">
+                            <Grid>
+                                <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                <Border Width="22" Height="22" Background="#123226" CornerRadius="6" VerticalAlignment="Top">
+                                    <TextBlock Text="✓" Foreground="{StaticResource VaultAccent}" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <TextBlock Grid.Column="1" x:Name="StatusText" Text="Passwords are protected locally on this Windows account." Foreground="#8FA1B8" FontSize="11.5" TextWrapping="Wrap" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                            </Grid>
+                        </Border>
+
+                        <Border x:Name="MessagePanel" Margin="0,10,0,0" Padding="12,9" Background="#261217" BorderBrush="#5A2932" BorderThickness="1" CornerRadius="9" Visibility="Collapsed">
+                            <TextBlock x:Name="MessageText" TextWrapping="Wrap" Foreground="#FF8994" FontSize="11.5"/>
+                        </Border>
+
+                        <Grid Margin="0,24,0,0">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                            <Button Grid.Column="0" Content="Exit" Click="Exit_Click" Style="{StaticResource SecondaryButton}"/>
+                            <TextBlock Grid.Column="1" Text="Secrets never leave this device." FontSize="10.5" Foreground="#627187" VerticalAlignment="Center" Margin="14,0" TextAlignment="Center"/>
+                            <Button Grid.Column="2" x:Name="ActionButton" Content="Unlock vault" Click="Action_Click" Style="{StaticResource PrimaryButton}"/>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+            </ScrollViewer>
+        </Grid>
+    </Border>
+</Window>

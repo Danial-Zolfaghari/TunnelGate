@@ -1,9 +1,7 @@
 # Optional bundled Plink
 
-TunnelGate can optionally embed `plink.exe` from this directory at build time.
+Place an official PuTTY `plink.exe` here only when you intentionally want to embed it into the published application.
 
-- Expected path: `tools/plink.exe`
-- Recommended source: the official PuTTY download host (`the.earth.li` / PuTTY project)
-- If the file is not present, the application still builds normally and downloads the official PuTTY Plink executable on first use.
+If the file is absent, TunnelGate still builds and retrieves the official PuTTY Plink binary at runtime when first required.
 
-Do not commit an unverified third-party copy of `plink.exe`.
+Do not commit unverified third-party binaries.

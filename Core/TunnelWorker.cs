@@ -302,10 +302,8 @@ internal sealed class TunnelWorker : IDisposable
             var so = p.StandardOutput.ReadToEndAsync(ct);
             var se = p.StandardError.ReadToEndAsync(ct);
             await p.WaitForExitAsync(ct).WaitAsync(TimeSpan.FromSeconds(15), ct);
-            var output = (await so) + "
-" + (await se);
-            var listening = output.Split('
-').Any(line => line.Contains($":{_tunnel.RemotePort}", StringComparison.Ordinal));
+            var output = (await so) + "\n" + (await se);
+            var listening = output.Split('\n').Any(line => line.Contains($":{_tunnel.RemotePort}", StringComparison.Ordinal));
             Write(listening
                 ? $"[VERIFY] Remote port {_tunnel.RemoteBind}:{_tunnel.RemotePort} is listening on SSH server."
                 : $"[WARN] Remote port {_tunnel.RemoteBind}:{_tunnel.RemotePort} was not confirmed by ss; check GatewayPorts/server bind.");
