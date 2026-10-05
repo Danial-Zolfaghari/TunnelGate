@@ -22,6 +22,14 @@
 
 ---
 
+## Supported platforms
+
+| Platform | Support | Notes |
+|---|---:|---|
+| Windows 10/11 x64 | ✅ | Native WPF application; primary and supported target |
+| Linux | ❌ | Current UI/runtime depends on Windows WPF, DPAPI and registry integration |
+| macOS | ❌ | Current UI/runtime is Windows-specific |
+
 ## Overview
 
 TunnelGate turns repetitive SSH tunneling workflows into a persistent Windows desktop experience.
