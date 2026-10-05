@@ -1,0 +1,27 @@
+bin/
+obj/
+output/
+dist/
+.vs/
+.idea/
+*.user
+*.suo
+*.pdb
+__pycache__/
+*.pyc
+installer-build/
+installer-output/
+Installer/Payload/TunnelGate.exe
+
+# Optional third-party runtime binary. The app downloads the official Plink build when absent.
+tools/plink.exe
+
+# Local secrets / exports / logs
+.env
+.env.*
+*.key
+*.pem
+*.ppk
+*.tgv
+*.log
+*.backup
