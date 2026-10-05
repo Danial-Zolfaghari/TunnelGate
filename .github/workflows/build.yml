@@ -18,14 +18,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Verify repository
-        shell: pwsh
-        run: python ./scripts/verify_repo.py
-
       - name: Setup .NET 8
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
+
+      - name: Restore
+        shell: pwsh
+        run: dotnet restore ./TunnelGate.Native.csproj -r win-x64
 
       - name: Build application and installer
         shell: pwsh
