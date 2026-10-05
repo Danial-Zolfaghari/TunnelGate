@@ -1,0 +1,36 @@
+<Window x:Class="TunnelGate.UI.NameDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Name"
+        Height="320"
+        Width="600"
+        MinWidth="600"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner" Background="{StaticResource Bg}" Foreground="{StaticResource Text}" Icon="/Assets/TunnelGate.ico">
+    <Border Margin="14" Background="#0B121D" BorderBrush="{StaticResource Border}" BorderThickness="1" CornerRadius="16" Padding="20">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel>
+                <TextBlock Text="TunnelGate" FontSize="11" FontWeight="Bold" Foreground="{StaticResource Accent}"/>
+                <TextBlock x:Name="PromptText" FontSize="17" FontWeight="SemiBold" Margin="0,8,0,0" TextWrapping="Wrap"/>
+                <TextBlock Text="Enter a clear name and then save the change." Foreground="{StaticResource Muted}" Margin="0,6,0,0"/>
+            </StackPanel>
+
+            <TextBlock Grid.Row="1" Text="Name" Foreground="{StaticResource Muted}" Margin="0,18,0,8"/>
+            <TextBox Grid.Row="2" x:Name="ValueBox" Height="50" FontSize="14" KeyDown="ValueBox_KeyDown"/>
+            <TextBlock Grid.Row="3" x:Name="ErrorText" Foreground="{StaticResource Danger}" Margin="0,14,0,0" TextWrapping="Wrap" FontSize="13"/>
+
+            <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,18,0,0">
+                <Button Content="Cancel" Click="Cancel_Click" Width="110" MinHeight="46"/>
+                <Button Content="Save" Click="Save_Click" Background="#174D35" BorderBrush="#285F48" Width="110" MinHeight="46"/>
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>
