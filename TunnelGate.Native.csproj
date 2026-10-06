@@ -32,6 +32,7 @@
   <ItemGroup>
     <!-- The installer is a separate WPF project. Never compile its sources into TunnelGate.exe. -->
     <Compile Remove="Installer\**\*.cs" />
+    <Compile Remove="tests\**\*.cs" />
     <Page Remove="Installer\**\*.xaml" />
     <ApplicationDefinition Remove="Installer\App.xaml" />
     <EmbeddedResource Remove="Installer\**\*" />
