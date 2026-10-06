@@ -1,4 +1,4 @@
-name: Windows Build
+name: Windows Build & Test
 
 on:
   push:
@@ -14,12 +14,35 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
-      - shell: pwsh
+
+      - name: Restore tests
+        run: dotnet restore .\tests\TunnelGate.Tests\TunnelGate.Tests.csproj
+
+      - name: Unit tests
+        run: dotnet test .\tests\TunnelGate.Tests\TunnelGate.Tests.csproj -c Release --no-restore --verbosity normal
+
+      - name: Build application and installer
+        shell: pwsh
         run: ./build-installer.ps1
-      - shell: pwsh
+
+      - name: Verify outputs
+        shell: pwsh
         run: |
           if (-not (Test-Path './output/TunnelGate.exe')) { throw 'TunnelGate.exe is missing.' }
           if (-not (Test-Path './installer-output/TunnelGate-Setup.exe')) { throw 'TunnelGate-Setup.exe is missing.' }
+
+      - name: Upload application
+        uses: actions/upload-artifact@v4
+        with:
+          name: TunnelGate
+          path: output/TunnelGate.exe
+
+      - name: Upload installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: TunnelGate-Setup
+          path: installer-output/TunnelGate-Setup.exe
