@@ -7,6 +7,12 @@
 <p align="center">Secure reverse SSH tunnels and local SOCKS proxies with encrypted local storage, independent workers, health checks, reconnect logic and a self-contained installer.</p>
 
 <p align="center"><img src="https://img.shields.io/badge/.NET-8.0-512BD4?logo=dotnet&logoColor=white" /> <img src="https://img.shields.io/badge/Windows-10%20%7C%2011-0078D4?logo=windows11&logoColor=white" /> <img src="https://img.shields.io/badge/UI-WPF-2D7D9A" /></p>
+<p align="center">
+  <a href="https://github.com/Danial-Zolfaghari/TunnelGate/actions/workflows/build.yml"><img alt="CI" src="https://github.com/Danial-Zolfaghari/TunnelGate/actions/workflows/build.yml/badge.svg"></a>
+  <a href="https://github.com/Danial-Zolfaghari/TunnelGate/releases"><img alt="Release" src="https://img.shields.io/github/v/release/Danial-Zolfaghari/TunnelGate?display_name=tag&sort=semver"></a>
+  <a href="LICENSE"><img alt="License" src="https://img.shields.io/github/license/Danial-Zolfaghari/TunnelGate"></a>
+</p>
+
 
 ## Supported platforms
 | Platform | Support | Notes |
