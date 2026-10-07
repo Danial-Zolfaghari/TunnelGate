@@ -21,6 +21,23 @@
 | Linux | ❌ | Current UI/runtime integration is Windows-specific |
 | macOS | ❌ | Current UI/runtime integration is Windows-specific |
 
+## Download
+
+The current Windows release is available from [GitHub Releases](https://github.com/Danial-Zolfaghari/TunnelGate/releases/latest).
+
+Release assets include:
+
+- `TunnelGate.exe` — self-contained portable application
+- `TunnelGate-Setup.exe` — Windows installer
+- `SHA256SUMS.txt` — SHA-256 checksums for release verification
+
+Verify a download in PowerShell:
+
+```powershell
+Get-FileHash .\TunnelGate.exe -Algorithm SHA256
+Get-FileHash .\TunnelGate-Setup.exe -Algorithm SHA256
+```
+
 ## Architecture
 ```mermaid
 flowchart LR
