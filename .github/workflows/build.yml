@@ -36,13 +36,13 @@ jobs:
           if (-not (Test-Path './installer-output/TunnelGate-Setup.exe')) { throw 'TunnelGate-Setup.exe is missing.' }
 
       - name: Upload application
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: TunnelGate
           path: output/TunnelGate.exe
 
       - name: Upload installer
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: TunnelGate-Setup
           path: installer-output/TunnelGate-Setup.exe
